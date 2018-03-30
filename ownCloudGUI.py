@@ -14,8 +14,8 @@ class ownCloudGUI(QMainWindow):
         self.title = 'ownCloudGUI'
         self.left = 250
         self.top = 250
-        self.width = 365
-        self.height = 150
+        self.width = 400
+        self.height = 200
         self.initUI()
 
         self.dir_user = 'C:\\Users\\' + os.getlogin() + '\\Desktop\\ownCloud\\'
@@ -55,37 +55,37 @@ class ownCloudGUI(QMainWindow):
         self.setGeometry(self.left, self.top, self.width, self.height)
 
         self.user_label = QLabel(self)
-        self.user_label.move(20, 15)
+        self.user_label.move(20, 25)
         self.user_label.setText('user')
         self.passwd_label = QLabel(self)
-        self.passwd_label.move(20, 50)
+        self.passwd_label.move(20, 75)
         self.passwd_label.setText('passwd')
 
         self.user = QLineEdit(self)
-        self.user.move(60, 20)
-        self.user.resize(280, 20)
+        self.user.move(60, 25)
+        self.user.resize(320, 30)
 
         self.passwd = QLineEdit(self)
         self.passwd.setEchoMode(QLineEdit.Password)
-        self.passwd.move(60, 55)
-        self.passwd.resize(280, 20)
+        self.passwd.move(60, 75)
+        self.passwd.resize(320, 30)
 
         self.connect = QPushButton('Connect', self)
-        self.connect.move(20, 90)
+        self.connect.move(20, 130)
         self.connect.clicked.connect(self.connect_click)
 
         self.synchronized = QPushButton('Synchronized', self)
-        self.synchronized.move(130, 90)
+        self.synchronized.move(150, 130)
         self.synchronized.setDisabled(True)
         self.synchronized.clicked.connect(self.synchronized_click)
 
         self.disconnect = QPushButton('Disconnect', self)
-        self.disconnect.move(240, 90)
+        self.disconnect.move(280, 130)
         self.disconnect.setDisabled(True)
         self.disconnect.clicked.connect(self.disconnect_click)
 
         self.progress = QProgressBar(self)
-        self.progress.setGeometry(21, 125, 353, 15)
+        self.progress.setGeometry(21, 170, 393, 20)
 
         self.show()
 
