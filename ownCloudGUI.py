@@ -20,27 +20,29 @@ class ownCloudGUI(QMainWindow):
 
         self.dir_user = 'C:\\Users\\' + os.getlogin() + '\\Desktop\\ownCloud\\'
         self.dir_tmp  = 'C:\\Users\\' + os.getlogin() + '\\Documents\\ownCloud\\'
+        self.dir_ownCloud = 'owncloudcmd'
+
         self.name_tmp = '~ownCloud.TMP'
         self.name_lock = '~lock_ownCloud.TMP'
         self.serv_url = 'http://disk.mmcs.sfedu.ru '
 
-        if not (os.path.exists(self.dir_doc)):
-            os.mkdir(self.dir_doc)
+        if not (os.path.exists(self.dir_tmp)):
+            os.mkdir(self.dir_tmp)
 
         this_pid = (os.getpid())
-        if not (os.path.exists(self.dir_doc + self.name_lock)):
-            owncloud_pid = open(self.dir_doc + self.name_lock, 'w')
+        if not (os.path.exists(self.dir_tmp + self.name_lock)):
+            owncloud_pid = open(self.dir_tmp + self.name_lock, 'w')
             owncloud_pid.write(str(this_pid) + '\n')
             owncloud_pid.close()
         else:
-            owncloud_pid = open(self.dir_doc + self.name_lock)
+            owncloud_pid = open(self.dir_tmp + self.name_lock)
             pid = owncloud_pid.read().strip()
             owncloud_pid.close()
             for proc in psutil.process_iter():
                 if proc.name() == 'python.exe' and str(proc.pid) == pid:
                     QMessageBox.question(self, 'Message','ownCloudGUI уже открыт',QMessageBox.Yes)
                     exit()
-            owncloud_pid = open(self.dir_doc + self.name_lock, 'w')
+            owncloud_pid = open(self.dir_tmp + self.name_lock, 'w')
             owncloud_pid.write(str(this_pid) + '\n')
             owncloud_pid.close()
 
@@ -127,13 +129,13 @@ class ownCloudGUI(QMainWindow):
 
             self.thread.join()
 
-            owncloud_tmp = open(self.dir_doc + self.name_tmp, 'w')
+            owncloud_tmp = open(self.dir_tmp + self.name_tmp, 'w')
             owncloud_tmp.write(user_c + '\n')
             owncloud_tmp.write(passwd_c + '\n')
             owncloud_tmp.close()
 
             os.mkdir(self.dir_user)
-            self.comm = 'owncloudcmd ' + user_c + passwd_c + self.dir_user + ' ' + self.serv_url
+            self.comm = self.dir_ownCloud + ' ' + user_c + passwd_c + self.dir_user + ' ' + self.serv_url
             if  self.synch(self.comm) == 1:
                 QMessageBox.question(self, 'Message', 'Не удалось подключиться, возможно вы ввели неправильные данные', QMessageBox.Yes)
                 self.passwd.setDisabled(False)
@@ -161,10 +163,10 @@ class ownCloudGUI(QMainWindow):
         try:
             if os.path.exists(self.dir_user):
                 rmtree(self.dir_user)
-            if os.path.exists(self.dir_doc + self.name_tmp):
-                os.remove(self.dir_doc + self.name_tmp)
-            if os.path.exists(self.dir_doc + self.name_lock):
-                os.remove(self.dir_doc + self.name_lock)
+            if os.path.exists(self.dir_user + self.name_tmp):
+                os.remove(self.dir_user + self.name_tmp)
+            if os.path.exists(self.dir_user + self.name_lock):
+                os.remove(self.dir_user + self.name_lock)
         except PermissionError:
             reply = QMessageBox.question(self, 'Message', 'Не получается удалить файлы', QMessageBox.Yes)
 
